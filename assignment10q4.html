@@ -1,0 +1,109 @@
+register.html
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>User Registration</title>
+</head>
+<body>
+<h2>User Registration Form</h2>
+<form action="insert.php" method="post">
+Name: <br>
+<input type="text" name="name"><br><br>
+Address: <br>
+<input type="text" name="address"><br><br>
+Email: <br>
+<input type="email" name="email"><br><br>
+Mobile No: <br>
+<input type="text" name="mobile"><br><br>
+<input type="submit" value="Register">
+</form>
+</body>
+</html>
+
+Insert.php
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Database Setup</title>
+</head>
+<body>
+<?php
+$conn = new mysqli("localhost", "root", "manas","mydatabase");
+if(!$conn)
+{
+    die("Connection failed: " . mysqli_connect_error());
+}
+$name = $_POST['name'];
+$address = $_POST['address'];
+$email = $_POST['email'];
+$mobile = $_POST['mobile'];
+$sql = "INSERT INTO student(name,address,email,mobile)
+VALUES('$name','$address','$email','$mobile')";
+if(mysqli_query($conn,$sql))
+{
+    echo "Registration Successful";
+}
+else
+{
+    echo "Error: " . mysqli_error($conn);
+}
+
+mysqli_close($conn);
+?>
+</body>
+</html>
+
+
+
+
+
+Display.php
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Database Setup</title>
+</head>
+<body>
+<?php
+$servername = "localhost";
+$username = "root";
+$password = "manas"; // your password
+$database = "mydatabase";
+$conn = new mysqli($servername, $username, $password, $database);
+if(!$conn)
+{
+    die("Connection failed: " . mysqli_connect_error());
+}
+$sql = "SELECT * FROM student";
+$result = mysqli_query($conn,$sql);
+echo "<h2>User Information</h2>";
+echo "<table border='1'>";
+echo "<tr>
+<th>ID</th>
+<th>Name</th>
+<th>Address</th>
+<th>Email</th>
+<th>Mobile</th>
+</tr>";
+
+while($row = mysqli_fetch_assoc($result))
+{
+    echo "<tr>";
+    echo "<td>".$row['id']."</td>";
+    echo "<td>".$row['name']."</td>";
+    echo "<td>".$row['address']."</td>";
+    echo "<td>".$row['email']."</td>";
+    echo "<td>".$row['mobile']."</td>";
+    echo "</tr>";
+}
+echo "</table>";
+mysqli_close($conn);
+?>
+</body>
+</html>
